@@ -108,9 +108,7 @@ class MyDBD
     const BLOB = 'blob';
 
     protected
-        $options                = null;
-
-    private
+        $options                = null,
         $link                   = null,
         $connected              = false,
         $connectionInfo         = null,
@@ -225,7 +223,7 @@ class MyDBD
     {
         if ($this->transactionInProgress)
         {
-            error_log('A transaction have been left uncommited, rolling it back...');
+            sfContext::getInstance()->getLogger()->log('A transaction have been left uncommited, rolling it back...');
             $this->rollback();
         }
     }
@@ -470,7 +468,7 @@ class MyDBD
     {
         if (!$this->autocommitState)
         {
-            error_log('MyDBD: begin a transaction on a connection with autocommit already disabled.');
+            sfContext::getInstance()->getLogger()->log('MyDBD: begin a transaction on a connection with autocommit already disabled.');
         }
 
         $this->transactionInProgress = true;
@@ -785,7 +783,7 @@ class MyDBD
             catch (SQLException $e)
             {
                 $delay = null; // if can't get replication delay, assume replication is down
-                error_log("Error while checking real-time slave status, assuming it's not RT: ".$e->getMessage());
+                sfContext::getInstance()->getLogger()->log("Error while checking real-time slave status, assuming it's not RT: ".$e->getMessage());
             }
             $this->realtime = isset($delay) && $delay == 0;
         }

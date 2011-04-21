@@ -55,7 +55,7 @@ abstract class MyDBD_Logger
         {
             $query = preg_replace('/\?/e', 'is_string($v = array_shift($params)) ? "\'". $v ."\'" : $v', $query);
         }
-        error_log($command . ' ' . $query);
+        sfContext::getInstance()->getLogger()->log($command . ' ' . $query);
 
         self::$logs[] = array('command' => $command, 'query' => $query, 'duration' => $duration, 'callpath' => $callPath);
     }
